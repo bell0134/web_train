@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>新規投稿</title>
+  </head>
+  <body>
+    <h1>投稿作成ページ</h1>
+    <form action="/posts" method="post">
+      <div class="mb-3">
+        <label for="title">タイトル</label>
+        <input type="text" name="title" id="title" required />
+      </div>
+
+      <div class="mb-3">
+        <label for="note">内容</label>
+        <textarea
+          name="note"
+          id="note"
+          rows="5"
+          cols="40"
+          placeholder="ここに内容を入力してください"
+          required
+        ></textarea>
+      </div>
+      <!-- <div class="mb-3">
+    <label for="image" class="form-label">画像のアップロード</label>
+    <input type="file" name="image" id="image" multiple />
+  </div> -->
+      <div class="mb-3"><button type="submit">投稿</button></div>
+    </form>
+  </body>
+</html>
