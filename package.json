@@ -9,9 +9,14 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "apload": "^1.0.18",
     "app": "^0.1.0",
     "express": "^5.1.0",
+    "express-session": "^1.18.1",
     "mongodb": "^6.17.0",
-    "mongoose": "^8.16.0"
+    "mongoose": "^8.16.0",
+    "multer": "^2.0.1",
+    "passport": "^0.7.0",
+    "passport-local-mongoose": "^8.0.0"
   }
 }

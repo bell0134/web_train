@@ -7,11 +7,20 @@
   </head>
   <body>
     <h1>ユーザ登録</h1>
-    <form action="/register" method="post" novalidate>
+    <form action="/register" method="post">
       <div class="mb-3">
         <label for="username">ユーザ名</label>
         <input type="text" name="username" id="username" required />
       </div>
+      <div class="mb-3">
+        <label for="email">メールアドレス</label>
+        <input type="email" name="email" id="email" required />
+      </div>
+      <div class="mb-3">
+        <label for="password">パスワード</label>
+        <input type="password" name="password" id="password" required />
+      </div>
+      <button class="btn btn-success">登録</button>
     </form>
   </body>
 </html>

@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const postSchema = new Schema({
   title: String,
   note: String,
-  //   image: String,
+  image: String, // 画像ファイルのパス
 });
 
 module.exports = mongoose.model("Post", postSchema);
