@@ -25,18 +25,15 @@
         <a class="nav-link" href="/login">ログイン</a>
       </li>
       <li class="nav-item">
-        <a
-          class="nav-link disabled"
-          href="/register"
-          tabindex="-1"
-          aria-disabled="true"
-          >新規登録</a
-        >
+        <a class="nav-link" href="/register">新規登録</a>
       </li>
     </ul>
     <h1>投稿一覧</h1>
 
-    <% for (let post of posts){ %>
+    <% if (typeof error !== 'undefined') { %>
+    <div class="alert alert-danger" role="alert"><%= error %></div>
+    <% } %> <% if (typeof posts !== 'undefined' && posts.length > 0) { %> <% for
+    (let post of posts) { %>
     <div
       style="
         border: 1px solid #ccc;
@@ -45,10 +42,29 @@
         border-radius: 8px;
         background-color: #f9f9f9;
       "
+      class="post-box"
     >
       <h2><%= post.title %></h2>
       <p><%= post.note %></p>
+
+      <div class="d-flex gap-2">
+        <a href="/posts/<%= post._id %>" class="btn btn-info">詳細を見る</a>
+
+        <% if (currentUser && post.author && currentUser._id.toString() ===
+        post.author._id.toString()) { %>
+        <a href="/posts/<%= post._id %>/edit" class="btn btn-primary">編集</a>
+        <form
+          action="/posts/<%= post._id %>?_method=DELETE"
+          method="POST"
+          style="display: inline"
+        >
+          <button type="submit" class="btn btn-danger">削除</button>
+        </form>
+        <% } %>
+      </div>
     </div>
+    <% } %> <% } else { %>
+    <p>投稿がありません</p>
     <% } %>
 
     <script src="app.js"></script>

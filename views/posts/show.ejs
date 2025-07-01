@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>投稿詳細</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="container mt-4">
+      <nav class="nav justify-content-center mb-4">
+        <a class="nav-link" href="/posts">投稿一覧</a>
+        <% if(currentUser) { %>
+        <a class="nav-link" href="/posts/new">新規投稿</a>
+        <a class="nav-link" href="/logout">ログアウト</a>
+        <% } else { %>
+        <a class="nav-link" href="/login">ログイン</a>
+        <a class="nav-link" href="/register">新規登録</a>
+        <% } %>
+      </nav>
+
+      <div class="card mb-4">
+        <div class="card-body">
+          <h1 class="card-title"><%= post.title %></h1>
+          <% if(post.image) { %>
+          <img src="<%= post.image %>" class="img-fluid mb-3" alt="投稿画像" />
+          <% } %>
+          <p class="card-text"><%= post.note %></p>
+          <% if(post.author) { %>
+          <p class="text-muted">投稿者: <%= post.author.username %></p>
+          <% } %> <% if(currentUser && post.author && currentUser._id.toString()
+          === post.author._id.toString()) { %>
+          <div class="btn-group">
+            <a
+              href="/posts/<%= post._id %>/edit"
+              class="btn btn-outline-primary"
+              >編集</a
+            >
+            <form
+              action="/posts/<%= post._id %>?_method=DELETE"
+              method="POST"
+              class="d-inline"
+            >
+              <button class="btn btn-outline-danger" type="submit">削除</button>
+            </form>
+          </div>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- コメントセクション -->
+      <div class="comments-section">
+        <h2>コメント</h2>
+        <% if(currentUser) { %>
+        <form
+          action="/posts/<%= post._id %>/comments"
+          method="POST"
+          class="mb-4"
+        >
+          <div class="form-group">
+            <textarea
+              name="body"
+              class="form-control"
+              rows="3"
+              placeholder="コメントを入力してください"
+              required
+            ></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary mt-2">
+            コメントする
+          </button>
+        </form>
+        <% } %> <% if(post.comments && post.comments.length > 0) { %> <%
+        post.comments.forEach(function(comment) { %>
+        <div class="card mb-2">
+          <div class="card-body">
+            <p class="card-text"><%= comment.body %></p>
+            <% if(comment.author) { %>
+            <p class="text-muted small">
+              <%= comment.author.username %> - <%= comment.createdAt ?
+              comment.createdAt.toLocaleDateString() : '日付なし' %>
+            </p>
+            <% } %>
+          </div>
+        </div>
+        <% }) %> <% } else { %>
+        <p>まだコメントはありません</p>
+        <% } %>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
