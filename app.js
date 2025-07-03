@@ -10,6 +10,7 @@ const multer = require("multer");
 const path = require("path");
 const User = require("./models/users");
 const LocalStrategy = require("passport-local");
+const Message = require("./models/message");
 
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) {
@@ -253,6 +254,36 @@ app.post("/register", async (req, res) => {
   } catch (e) {
     res.send("エラー：", e.message);
   }
+});
+//DMの準備
+app.get("/users", isLoggedIn, async (req, res) => {
+  const users = await User.find({ _id: { $ne: req.user._id } }); //自分以外
+  res.render("users/index", { users });
+});
+app.get("/messages/:id", isLoggedIn, async (req, res) => {
+  const otherUserId = req.params.id;
+
+  const messages = await Message.find({
+    $or: [
+      { sender: req.user._id, receiver: otherUserId },
+      { sender: otherUserId, receiver: req.user._id },
+    ], //自分が送って相手が受け取ったメッセージとその逆を一緒に取得
+  })
+    .populate("sender")
+    .populate("receiver")
+    .sort("createAt"); //古い順に並べる
+
+  const otherUser = await User.findById(otherUserId);
+  res.render("messages/thread", { messages, otherUser });
+});
+app.post("/messages/:id", isLoggedIn, async (req, res) => {
+  const newMessage = new Message({
+    body: req.body.body, //フォームから送られてきた本文
+    sender: req.user._id,
+    receiver: req.params.id,
+  });
+  await newMessage.save();
+  res.redirect(`/messages/${req.params.id}`);
 });
 
 app.listen(3000, () => {
